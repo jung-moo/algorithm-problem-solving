@@ -3,27 +3,56 @@ package baekjoon.set01.step01.problem01_10816;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    private static void solution(int N, int[] arr1, int M, int[] arr2) {
+    //num 을 초과하는 숫자가 처음 등장하는 위치
+    private static int upperBound(int[] cards, int num) {
 
-        StringBuilder sb = new StringBuilder();
-        Map<Integer, Integer> map = new HashMap<>();
+        int left = 0;
+        int right = cards.length - 1;
+        int answer = cards.length;
 
-        for(int i=0; i<N; i++) {
-            map.put(arr1[i], map.getOrDefault(arr1[i], 0)+1);
+        while (left <= right) {
+
+            int mid = left + (right - left) / 2;
+
+            if (cards[mid] > num) {
+                answer = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+
         }
 
-        for(int i=0; i<M; i++) {
-            int newNum = (map.get(arr2[i]) == null) ? 0 : map.get(arr2[i]);
-            sb.append(newNum).append(' ');
+        return answer;
+
+    }
+
+    //num 이상의 숫자가 처음 등장하는 위치
+    private static int lowerBound(int[] cards, int num) {
+
+        int left = 0;
+        int right = cards.length - 1;
+        int answer = cards.length;
+
+        while (left <= right) {
+
+            int mid = left + (right - left) / 2;
+
+            if (cards[mid] >= num) {
+                answer = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+
         }
 
-        System.out.print(sb);
+        return answer;
 
     }
 
@@ -33,22 +62,29 @@ public class Main {
         StringTokenizer st;
 
         int N = Integer.parseInt(br.readLine());
-        int[] arr1 = new int[N];
+
+        int[] cards = new int[N];
 
         st = new StringTokenizer(br.readLine());
+
         for(int i=0; i<N; i++) {
-            arr1[i] = Integer.parseInt(st.nextToken());
+            cards[i] = Integer.parseInt(st.nextToken());
         }
 
         int M = Integer.parseInt(br.readLine());
-        int[] arr2 = new int[M];
 
         st = new StringTokenizer(br.readLine());
+
+        StringBuilder sb = new  StringBuilder();
+
+        Arrays.sort(cards);
+
         for(int i=0; i<M; i++) {
-            arr2[i] = Integer.parseInt(st.nextToken());
+            int num = Integer.parseInt(st.nextToken());
+            sb.append(upperBound(cards, num) - lowerBound(cards, num)).append(" ");
         }
 
-        solution(N, arr1, M, arr2);
+        System.out.print(sb.toString());
 
     }
 
