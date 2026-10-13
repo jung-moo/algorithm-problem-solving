@@ -10,3 +10,6 @@ bin/
 #etc
 etc/
 
+#obsidian
+.obsidian/
+
