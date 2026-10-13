@@ -7,3 +7,6 @@ out/
 bin/
 *.class
 
+#etc
+etc/
+
