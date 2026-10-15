@@ -1,4 +1,4 @@
-package study.problems.baekjoon.set01.problem05_1966;
+package study.problems.baekjoon.set01.p05_1966;
 
 import java.io.BufferedReader;
 import java.io.IOException;
