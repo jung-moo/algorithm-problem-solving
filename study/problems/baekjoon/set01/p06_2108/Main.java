@@ -3,12 +3,7 @@ package study.problems.baekjoon.set01.p06_2108;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Main {
 
@@ -32,24 +27,35 @@ public class Main {
 
   private static int solution3(int[] arr, int N) {
 
-    Map<Integer, Integer> map = new HashMap<>();
+    int[] counts = new int[8001];
 
     for (int i=0; i<N; i++) {
-      map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+      counts[ arr[i] + 4000 ]++;
     }
 
-    int maxCnt = Collections.max(map.values());
-    List<Integer> list = new ArrayList<>();
+    int maxCnt = 0;
 
-    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-      if (entry.getValue() == maxCnt) {
-        list.add(entry.getKey());
+    for (int i=0; i<8001; i++) {
+      if (counts[i] > maxCnt) {
+        maxCnt = counts[i];
       }
     }
 
-    Collections.sort(list);
+    boolean flag = false;
+    int answer = -1;
 
-    return list.size() > 1 ? list.get(1) : list.get(0);
+    for (int i=0; i<8001; i++) {
+      if (counts[i] == maxCnt) {
+        if(flag) {
+          return i - 4000;
+        } else {
+          flag = true;
+          answer = i - 4000;
+        }
+      }
+    }
+
+    return answer;
 
   }
 
