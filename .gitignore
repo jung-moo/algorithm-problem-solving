@@ -1,3 +1,7 @@
+
+etc/
+practice/
+
 #IntelliJ IDEA
 .idea/
 *.iml
@@ -6,9 +10,6 @@
 out/
 bin/
 *.class
-
-#etc
-etc/
 
 #obsidian
 .obsidian/
