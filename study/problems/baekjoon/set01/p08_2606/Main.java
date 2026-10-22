@@ -3,24 +3,28 @@ package study.problems.baekjoon.set01.p08_2606;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Main {
 
-  static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
-  static boolean[] visited;
-  static int answer = 0;
+  static int[] parents;
 
-  private static void dfs(int start) {
+  private static void union(int a, int b) {
 
-    visited[start] = true;
+    int aRoot = findRoot(a);
+    int bRoot = findRoot(b);
 
-    for (int next : graph.get(start)) {
-      if (visited[next]) continue;
-      answer++;
-      dfs(next);
+    if(aRoot != bRoot) {
+      parents[aRoot] = bRoot;
     }
+
+  }
+
+  private static int findRoot(int target) {
+
+    if (parents[target] == target) return target;
+
+    return parents[target] = findRoot(parents[target]);
 
   }
 
@@ -32,21 +36,23 @@ public class Main {
     int N = Integer.parseInt(br.readLine());
     int M = Integer.parseInt(br.readLine());
 
-    visited = new boolean[N+1];
+    parents = new int[N+1];
 
-    for (int i=0; i<=N; i++) {
-      graph.add(new ArrayList<>());
-    }
+    for (int i=1; i<=N; i++) parents[i] = i;
 
     for (int i=0; i<M; i++) {
       st = new StringTokenizer(br.readLine());
       int a = Integer.parseInt(st.nextToken());
       int b = Integer.parseInt(st.nextToken());
-      graph.get(a).add(b);
-      graph.get(b).add(a);
+      union(a, b);
     }
 
-    dfs(1);
+    int answer = 0;
+    int startRoot = findRoot(1);
+
+    for (int i=2; i<=N; i++) {
+      if (startRoot == findRoot(i)) answer++;
+    }
 
     System.out.print(answer);
 
