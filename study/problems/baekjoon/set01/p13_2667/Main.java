@@ -9,16 +9,15 @@ import java.util.Collections;
 public class Main {
 
   static int N;
-  static int size;
   static char[][] map;
   static boolean[][] visited;
   static final int[] DR = {-1, 0, 1, 0};
   static final int[] DC = {0, 1, 0, -1};
 
-  private static void dfs(int row, int col) {
+  private static int dfs(int row, int col) {
 
     visited[row][col] = true;
-    size++;
+    int size = 1;
 
     for (int i=0; i<4; i++) {
       int nextRow = row + DR[i];
@@ -26,8 +25,10 @@ public class Main {
       if (nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N) continue;
       if (map[nextRow][nextCol] != '1') continue;
       if (visited[nextRow][nextCol]) continue;
-      dfs(nextRow, nextCol);
+      size += dfs(nextRow, nextCol);
     }
+
+    return size;
 
   }
 
@@ -44,22 +45,19 @@ public class Main {
       map[i] = br.readLine().toCharArray();
     }
 
-    int cnt = 0;
     ArrayList<Integer> list = new ArrayList<>();
 
     for (int row=0; row<N; row++) {
       for (int col=0; col<N; col++) {
         if (map[row][col] != '1' || visited[row][col]) continue;
-        dfs(row, col);
+        int size = dfs(row, col);
         list.add(size);
-        size = 0;
-        cnt++;
       }
     }
 
     StringBuilder sb = new StringBuilder();
 
-    sb.append(cnt).append('\n');
+    sb.append(list.size()).append('\n');
 
     Collections.sort(list);
 
