@@ -22,7 +22,6 @@ public class Main {
     if (wallCnt == 3) {
 
       int[][] mapCopy = new int[N][M];
-      boolean[][] visited = new boolean[N][M];
 
       for (int i=0; i<N; i++) {
         for (int j=0; j<M; j++) {
@@ -31,7 +30,7 @@ public class Main {
       }
 
       // 바이러스 확산
-      spreadVirus(mapCopy, visited);
+      spreadVirus(mapCopy);
 
       // 안전지대 사이즈 확인
       answer = Math.max(answer, checkSize(mapCopy));
@@ -41,7 +40,7 @@ public class Main {
     }
 
     for (int row=startRow; row<N; row++) {
-      int col = (row == startRow) ? startCol+1 : 0;
+      int col = (row == startRow) ? startCol : 0;
       for (; col<M; col++) {
         if (map[row][col] != 0) continue;
         map[row][col] = 1;
@@ -52,23 +51,15 @@ public class Main {
 
   }
 
-  private static void spreadVirus(int[][] mapCopy, boolean[][] visited) {
+  private static void spreadVirus(int[][] mapCopy) {
+
+    Queue<int[]> q = new ArrayDeque<>();
 
     for (int i=0; i<N; i++) {
       for (int j=0; j<M; j++) {
-        if (mapCopy[i][j] != 2) continue;
-        if (visited[i][j]) continue;
-        bfs(mapCopy, visited, i, j);
+        if (mapCopy[i][j] == 2) q.offer(new int[] {i, j});
       }
     }
-
-  }
-
-  private static void bfs(int[][] mapCopy, boolean[][] visited, int row, int col) {
-
-    Queue<int[]> q = new ArrayDeque<>();
-    q.offer(new int[] {row, col});
-    visited[row][col] = true;
 
     while (!q.isEmpty()) {
 
@@ -79,8 +70,6 @@ public class Main {
         int nextCol = now[1] + DC[i];
         if (nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= M) continue;
         if (mapCopy[nextRow][nextCol] != 0) continue;
-        if (visited[nextRow][nextCol]) continue;
-        visited[nextRow][nextCol] = true;
         mapCopy[nextRow][nextCol] = 2;
         q.offer(new int[] {nextRow, nextCol});
       }
@@ -122,15 +111,7 @@ public class Main {
       }
     }
 
-    for (int row=0; row<N; row++) {
-      for (int col=0; col<M; col++) {
-        if (map[row][col] == 0) {
-          map[row][col] = 1;
-          makeWall(row, col, 1);
-          map[row][col] = 0;
-        }
-      }
-    }
+    makeWall(0, 0, 0);
 
     System.out.print(answer);
 
