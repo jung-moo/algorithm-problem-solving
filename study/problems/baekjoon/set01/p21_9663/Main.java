@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class Main {
 
   static int N;
-  static boolean[][] board;
+  static int[] queen;
   static int answer;
 
   private static void dfs(int row) {
@@ -20,9 +20,8 @@ public class Main {
 
     for (int col=0; col<N; col++) {
       if (isPossible(row, col)) {
-        board[row][col] = true;
+        queen[row] = col;
         dfs(row + 1);
-        board[row][col] = false;
       }
     }
 
@@ -30,20 +29,8 @@ public class Main {
 
   private static boolean isPossible(int row, int col) {
 
-    for (int i=0; i<N; i++) {
-      if(board[i][col]) return false;
-    }
-
-    int[] dr = {-1, 1, 1, -1};
-    int[] dc = {1, 1, -1, -1};
-
-    for (int i=1; i<=N; i++) {
-      for (int j=0; j<4; j++) {
-        int nextRow = row + (i * dr[j]);
-        int nextCol = col + (i * dc[j]);
-        if (nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N) continue;
-        if (board[nextRow][nextCol]) return false;
-      }
+    for (int i=0; i<row; i++) {
+      if(queen[i] == col || Math.abs(i - row) == Math.abs(queen[i] - col)) return false;
     }
 
     return true;
@@ -56,7 +43,7 @@ public class Main {
 
     N = Integer.parseInt(br.readLine());
 
-    board = new boolean[N][N];
+    queen = new int[N];
 
     dfs(0);
 
